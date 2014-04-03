@@ -1,0 +1,33 @@
+# General OS & editor detritus
+.DS_Store
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+*.tmp
+*.bk
+*.bkup
+
+# Bundler
+Gemfile.lock
+.bundle/
+bundle/
+vendor/
+
+.cache/
+bin/
+tmp/
+
+# Berkshelf
+Berksfile.lock
+cookbooks/
+
+# Vagrant
+.vagrant/
+.vagrant.d/
+
+# Test Kitchen
+.kitchen.local.yml
+.kitchen
