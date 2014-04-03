@@ -31,10 +31,10 @@ rpm_package node['tcserver']['rpm_filename'] do
   source "#{Chef::Config[:file_cache_path]}/#{ node['tcserver']['rpm_filename'] }"
 end
 
-# tcserver_instance 'myserver' do
-#   action :create
-# end
+tcserver_instance 'myserver' do
+  action :create
+end
 
-# tcserver_ctl 'myserver' do
-#   action :start
-# end
+tcserver_ctl 'myserver' do
+  action :start
+end

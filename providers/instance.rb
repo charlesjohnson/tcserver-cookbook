@@ -18,11 +18,5 @@ action :create do
     link_type :symbolic
     to "/opt/vmware/vfabric-tc-server-standard/#{new_resource.instance_name}/bin/init.d.sh"
   end
-  #
-  #
-  # if
-  #   Chef::Log.info("tcserver instance #{new_resource.instance_name} already exists.")
-  # else
-  #   Chef::Log.info("Creating new tcserver instance #{new_resource.instance_name}")
-  # end
+  new_resource.updated_by_last_action(true)
 end
