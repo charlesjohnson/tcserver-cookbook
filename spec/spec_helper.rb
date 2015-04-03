@@ -1,6 +1,6 @@
 require 'chefspec'
 require 'chefspec/berkshelf'
-require 'chefspec/server'
+require 'safe_yaml'
 
 RSpec.configure do |config|
   # Specify the Chef log_level (default: :warn)
@@ -16,7 +16,7 @@ RSpec.configure do |config|
   # config.version = '12.04'
 
   # Use color output for RSpec
-  config.color_enabled = true
+  config.color = true
 
   # Use documentation output formatter
   # config.formatter = :documentation
@@ -35,3 +35,5 @@ if gem_available?('safe_yaml')
   SafeYAML::OPTIONS[:deserialize_symbols] = true
   SafeYAML::OPTIONS[:default_mode] = 'unsafe'
 end
+
+at_exit { ChefSpec::Coverage.start! }

@@ -17,9 +17,17 @@
 # limitations under the License.
 #
 
-include_recipe 'java::default'
+include_recipe 'java'
 
-remote_file "#{Chef::Config[:file_cache_path]}/#{node['tcserver']['rpm_filename']}" do
+if platform?('ubuntu')
+  include_recipe 'apt::default'
+elsif platform?('rhel')
+  include_recipe 'yum::default'
+end
+
+file_cache_path = node['tcserver']['file_cache_path'] ? node['tcserver']['file_cache_path'] : Chef::Config[:file_cache_path]
+
+remote_file "#{file_cache_path}/#{node['tcserver']['rpm_filename']}" do
   owner 'root'
   group 'root'
   mode '0644'
@@ -28,13 +36,23 @@ remote_file "#{Chef::Config[:file_cache_path]}/#{node['tcserver']['rpm_filename'
 end
 
 rpm_package node['tcserver']['rpm_filename'] do
-  source "#{Chef::Config[:file_cache_path]}/#{ node['tcserver']['rpm_filename'] }"
+  source "#{file_cache_path}/#{node['tcserver']['rpm_filename']}"
 end
 
-tcserver_instance 'myserver' do
+begin
+  tcserver = Mixlib::ShellOut.new(
+    '/opt/vmware/vfabric-tc-server-standard/myserver/bin/tcruntime-ctl.sh status',
+    :user => 'root').run_command.stdout
+rescue
+  tcserver = ''
+end
+
+tcserver_instance node['tcserver']['server_name'] do
   action :create
+  not_if { ::Dir.exist?('/opt/vmware/vfabric-tc-server-standard/myserver/bin/') }
 end
 
-tcserver_ctl 'myserver' do
+tcserver_ctl node['tcserver']['server_name'] do
   action :start
+  not_if { tcserver =~ /RUNNING as/ }
 end

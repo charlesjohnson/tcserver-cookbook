@@ -5,6 +5,7 @@ AllCops:
     - Rakefile
   Excludes:
     - vendor/**
+    - metadata.rb
 
 AlignParameters:
   Enabled: false
